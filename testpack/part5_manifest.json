@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "part": 5,
+  "files": {
+    "tests/test_gui_part5.py": "a7ccb78e59269ad233fb08944bb8c62322faa50f5c9b6fe8f74278ac56299326",
+    "tests/test_part5_core.py": "e6da04651494c3909e2c66c42b99c81617dd34955e4c064345ecfae3d6586966",
+    "tests/test_part5_integration.py": "e6b6fdfd77d6c9c666b4c299fcc1a486cfaef293cf618816e275c9e1c17fd2ca"
+  }
+}

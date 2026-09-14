@@ -1,0 +1,13 @@
+.venv*/
+__pycache__/
+*.pyc
+.chromapress-state/
+*.iso
+*.part
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+test-reports/
+.coverage
+htmlcov/

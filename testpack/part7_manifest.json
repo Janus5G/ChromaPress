@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "part": 7,
+  "description": "Part 7 consolidated fail-fast/resume acceptance package: inspectable profiles, capability-backed production presets, reviewed Expert hooks and production preflight/build-plan staging.",
+  "files": {
+    "tests/test_gui_part7.py": "6a8aed17c12db045c63cd2c87c41038978a6a06549787f8e99c4237d79e09290",
+    "tests/test_part7_core.py": "193622c29270b7cf4b0a4e966cd9521d422ccfb1d91fbb59ad25b36a8b4c77e4",
+    "tests/test_part7_integration.py": "e978a5d0a1610cab713b3351440e2003b7f37331336f4874c98d61dbd4545bfb"
+  }
+}

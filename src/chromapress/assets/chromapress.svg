@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <rect x="3" y="3" width="58" height="58" rx="12" fill="#313b4b"/>
+  <path d="M18 18h28v28H18z" fill="none" stroke="#e8edf5" stroke-width="3" opacity="0.35"/>
+  <text x="32" y="39" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">CP</text>
+</svg>

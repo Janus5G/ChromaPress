@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "part": 8,
+  "description": "Part 8 consolidated fail-fast/resume acceptance package: prioritized cross-distro adapter contracts, fail-closed static/runtime acceptance records, diagnostics export, target os-release evidence and GUI verification boundary.",
+  "files": {
+    "tests/test_gui_part8.py": "65827c9ed272cd6e9132890bea15ec01d42bf7d2a4147f8777242b46f7210f20",
+    "tests/test_part8_core.py": "e39ed46303a1410aad1249869dbabdef31026264827fae616e956a863126fd23",
+    "tests/test_part8_integration.py": "7691026f319956860038a0e020ad4a9faabeeaf0d4f89fa05ad8962eaf713c29"
+  }
+}

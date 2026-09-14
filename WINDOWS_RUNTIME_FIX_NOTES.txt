@@ -1,0 +1,10 @@
+ChromaPress Windows runtime fix
+
+Fixes:
+1. WSL analysis launched from the GUI EXE no longer opens a transient Windows Terminal/console window. Console helpers are launched with CREATE_NO_WINDOW.
+2. ChromaPress runtime assets are resolved correctly in PyInstaller one-file builds.
+3. The main/window/About icon prefers a bundled PNG and no longer depends on Qt SVG support.
+4. Windows AppUserModelID is set for correct application/taskbar identity.
+5. Components/Application placeholder asset lookup works in source and frozen builds.
+
+This patch does not replace packaging/chromapress.spec or packaging/windows_entry.py, so keep the previous runtime-import fix installed.

@@ -1,0 +1,11 @@
+ChromaPress v1 Alpha 2 cumulative patch
+
+1. Close ChromaPress.
+2. Extract this ZIP directly into:
+   E:\Custom linux builder\ChromaPress-v1-alpha1\
+3. Allow Windows to replace existing files.
+4. Keep the existing .venv-win folder.
+5. Start ChromaPress again with:
+   .\.venv-win\Scripts\chromapress.exe
+
+This is cumulative: it includes the earlier source/download crash/cancel work plus the Settings, dialog-size and AI App Studio UX changes.

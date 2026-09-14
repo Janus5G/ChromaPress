@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "part": 7,
+  "accepted_legacy_sets": {
+    "alpha71": {
+      "tests/test_gui_part7.py": "6a8aed17c12db045c63cd2c87c41038978a6a06549787f8e99c4237d79e09290",
+      "tests/test_part7_core.py": "193622c29270b7cf4b0a4e966cd9521d422ccfb1d91fbb59ad25b36a8b4c77e4",
+      "tests/test_part7_integration.py": "a018a366888c13a42f1c7cb9d9e6efaff4e81ad07f5d8ca2a28159ec1f0f6e26"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "accepted_legacy_sets": {
+    "alpha69-fix1-part5": {
+      "tests/test_gui_part5.py": "88fc2008e28f78ee43a91b496010e34577fc783f951e5a4f39c4c76a750a4d9b",
+      "tests/test_part5_core.py": "62a642ea01ca4194aa3ab1aa0e336d0d17b9d0c44f2b10b44f27eee95dbb8f61",
+      "tests/test_part5_integration.py": "da40b57bbabb3708c70df53f324a86d9b0873dfceae6ede0cacdd0e8ead659ea"
+    },
+    "alpha69-fix3": {
+      "tests/test_gui_part5.py": "a7ccb78e59269ad233fb08944bb8c62322faa50f5c9b6fe8f74278ac56299326",
+      "tests/test_part5_core.py": "62a642ea01ca4194aa3ab1aa0e336d0d17b9d0c44f2b10b44f27eee95dbb8f61",
+      "tests/test_part5_integration.py": "e6b6fdfd77d6c9c666b4c299fcc1a486cfaef293cf618816e275c9e1c17fd2ca"
+    },
+    "alpha71": {
+      "tests/test_gui_part5.py": "a7ccb78e59269ad233fb08944bb8c62322faa50f5c9b6fe8f74278ac56299326",
+      "tests/test_part5_core.py": "9f3e683e61f8ddd781197e2e7e22b94a955afed02efcf81453ffdbf66fe933c7",
+      "tests/test_part5_integration.py": "e6b6fdfd77d6c9c666b4c299fcc1a486cfaef293cf618816e275c9e1c17fd2ca"
+    }
+  }
+}

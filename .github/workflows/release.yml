@@ -1,0 +1,76 @@
+name: Build release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Create build environment
+        shell: pwsh
+        run: |
+          python -m venv .venv-win
+          .\.venv-win\Scripts\python.exe -m pip install --upgrade pip
+          .\.venv-win\Scripts\python.exe -m pip install . pytest pyinstaller
+      - name: Final release regression
+        shell: pwsh
+        run: .\.venv-win\Scripts\python.exe -m pytest -q final_testpack/tests/test_final_release_gate.py
+      - name: Build ChromaPress.exe
+        shell: pwsh
+        run: .\packaging\build_windows_release.ps1 -SkipInstall
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chromapress-windows
+          path: |
+            dist/ChromaPress.exe
+            dist/ChromaPress.exe.sha256
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Source regression
+        run: |
+          python -m pip install pytest
+          PYTHONPATH=src python -m pytest -q final_testpack/tests/test_final_release_gate.py -k 'not about_icon_mit_and_share_button_gui'
+      - name: Build Debian package
+        run: ./packaging/build_deb.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chromapress-linux
+          path: |
+            dist/*.deb
+            dist/*.deb.sha256
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [windows, linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if echo "${GITHUB_REF_NAME}" | grep -Eqi 'alpha|beta|rc'; then
+            gh release create "${GITHUB_REF_NAME}" release-assets/* --generate-notes --prerelease
+          else
+            gh release create "${GITHUB_REF_NAME}" release-assets/* --generate-notes
+          fi
