@@ -23,6 +23,9 @@ class AppSettings:
 
     cpl_toolchain_path: str = ""
 
+    # ChromaPress UI language. Danish is the product default; English is fallback.
+    language: str = "da"
+
     @staticmethod
     def defaults(base: Path) -> "AppSettings":
         # Large-data locations are intentionally unset on first start.

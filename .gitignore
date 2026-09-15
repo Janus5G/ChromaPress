@@ -11,3 +11,9 @@ dist/
 test-reports/
 .coverage
 htmlcov/
+
+# Local development/backups
+*.before-*
+*-backup-*/
+translation_inventory.txt
+chromapress-localization-patch/

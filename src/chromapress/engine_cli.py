@@ -4878,12 +4878,18 @@ def main() -> int:
     c.add_argument("--workspace", required=True, type=Path)
     c.add_argument("--cache-dir", type=Path)
     c.add_argument("--cache-key", default="")
+    b = sub.add_parser("build")
+    b.add_argument("plan", type=Path)
     args = parser.parse_args()
     if args.cmd == "analyze":
         print(json.dumps(analyze(args.iso), indent=2))
         return 0
     if args.cmd == "catalog":
         print(json.dumps(application_catalog(args.iso, args.workspace, args.cache_dir, args.cache_key), indent=2))
+        return 0
+    if args.cmd == "build":
+        from chromapress.services.builder import build_iso_from_plan
+        print(json.dumps(build_iso_from_plan(args.plan), indent=2))
         return 0
     return 2
 

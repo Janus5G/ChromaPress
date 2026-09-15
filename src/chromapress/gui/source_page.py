@@ -1,26 +1,15 @@
 from __future__ import annotations
-
+from chromapress.i18n import tr
 from pathlib import Path
 from threading import Event
 from uuid import uuid4
-
 from PySide6.QtCore import QThread, Signal, QObject, Slot
-from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFileDialog,
-    QComboBox, QGroupBox, QProgressBar, QMessageBox
-)
-
-from chromapress.services.downloads import (
-    OFFICIAL_SOURCES,
-    DownloadCancelled,
-    download_official,
-)
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFileDialog, QComboBox, QGroupBox, QProgressBar, QMessageBox
+from chromapress.services.downloads import OFFICIAL_SOURCES, DownloadCancelled, download_official
 from chromapress.services.wsl import WslBridge
-
 
 class Worker(QObject):
     """Run one non-GUI task in a QThread and marshal results back to Qt."""
-
     finished = Signal(str, object)
     failed = Signal(str, str)
     cancelled = Signal(str)
@@ -36,19 +25,18 @@ class Worker(QObject):
     @Slot()
     def run(self):
         try:
+
             def report_progress(value: int):
                 self.progress.emit(self.task_id, int(value))
 
             def report_status(text: str):
                 self.status.emit(self.task_id, text)
-
             result = self.fn(report_progress, report_status, self.cancel_event)
             self.finished.emit(self.task_id, result)
         except DownloadCancelled:
             self.cancelled.emit(self.task_id)
         except Exception as exc:
             self.failed.emit(self.task_id, str(exc))
-
 
 class SourcePage(QWidget):
     source_analyzed = Signal(dict)
@@ -58,57 +46,45 @@ class SourcePage(QWidget):
         self.settings = settings
         self._tasks: dict[str, tuple[QThread, Worker, object, Event, bool]] = {}
         self._active_download_task: str | None = None
-
         layout = QVBoxLayout(self)
-        title = QLabel("Source")
-        title.setObjectName("pageTitle")
-        subtitle = QLabel(
-            "Start from an official Linux release or open an existing/custom ISO directly. "
-            "Existing ISO files are never uploaded or copied just to analyze them."
-        )
+        title = QLabel(tr('Source'))
+        title.setObjectName('pageTitle')
+        subtitle = QLabel(tr('Start from an official Linux release or open an existing/custom ISO directly. Existing ISO files are never uploaded or copied just to analyze them.'))
         subtitle.setWordWrap(True)
         layout.addWidget(title)
         layout.addWidget(subtitle)
-
-        official = QGroupBox("Create from official distribution (new source)")
+        official = QGroupBox(tr('Create from official distribution (new source)'))
         o = QVBoxLayout(official)
         row = QHBoxLayout()
         self.official_combo = QComboBox()
         for source in OFFICIAL_SOURCES:
             self.official_combo.addItem(source.label, source.id)
-
-        self.download_btn = QPushButton("Download, verify & analyze")
-        self.cancel_btn = QPushButton("Cancel")
+        self.download_btn = QPushButton(tr('Download, verify & analyze'))
+        self.cancel_btn = QPushButton(tr('Cancel'))
         self.cancel_btn.setEnabled(False)
-
         row.addWidget(self.official_combo, 1)
         row.addWidget(self.download_btn)
         row.addWidget(self.cancel_btn)
         o.addLayout(row)
-
-        self.status_label = QLabel("Ready")
+        self.status_label = QLabel(tr('Ready'))
         o.addWidget(self.status_label)
-
         self.progress = QProgressBar()
         self.progress.setRange(0, 100)
         self.progress.setValue(0)
         o.addWidget(self.progress)
         layout.addWidget(official)
-
-        existing = QGroupBox("Open existing ISO")
+        existing = QGroupBox(tr('Open existing ISO'))
         e = QHBoxLayout(existing)
-        self.path_label = QLabel("No ISO selected")
+        self.path_label = QLabel(tr('No ISO selected'))
         self.path_label.setWordWrap(True)
-        self.open_btn = QPushButton("Open ISO…")
+        self.open_btn = QPushButton(tr('Open ISO…'))
         e.addWidget(self.path_label, 1)
         e.addWidget(self.open_btn)
         layout.addWidget(existing)
-
-        self.current_source_label = QLabel("Current source: none")
+        self.current_source_label = QLabel(tr('Current source: none'))
         self.current_source_label.setWordWrap(True)
         layout.addWidget(self.current_source_label)
         layout.addStretch(1)
-
         self.open_btn.clicked.connect(self.open_existing)
         self.download_btn.clicked.connect(self.download_official)
         self.cancel_btn.clicked.connect(self.cancel_download)
@@ -118,20 +94,18 @@ class SourcePage(QWidget):
         self.download_btn.setEnabled(not busy)
         self.official_combo.setEnabled(not busy)
 
-    def _run(self, fn, finished, *, cancellable: bool = False) -> str:
+    def _run(self, fn, finished, *, cancellable: bool=False) -> str:
         task_id = uuid4().hex
         thread = QThread(self)
         cancel_event = Event()
         worker = Worker(task_id, fn, cancel_event)
         worker.moveToThread(thread)
-
         thread.started.connect(worker.run)
         worker.finished.connect(self._on_worker_finished)
         worker.failed.connect(self._on_worker_failed)
         worker.cancelled.connect(self._on_worker_cancelled)
         worker.progress.connect(self._on_worker_progress)
         worker.status.connect(self._on_worker_status)
-
         worker.finished.connect(thread.quit)
         worker.failed.connect(thread.quit)
         worker.cancelled.connect(thread.quit)
@@ -140,7 +114,6 @@ class SourcePage(QWidget):
         worker.cancelled.connect(worker.deleteLater)
         thread.finished.connect(thread.deleteLater)
         thread.finished.connect(self._on_thread_finished)
-
         self._tasks[task_id] = (thread, worker, finished, cancel_event, cancellable)
         if cancellable:
             self._active_download_task = task_id
@@ -159,8 +132,8 @@ class SourcePage(QWidget):
     def _on_worker_status(self, task_id: str, text: str) -> None:
         if task_id not in self._tasks:
             return
-        self.status_label.setText(text)
-        if text.startswith("Verifying"):
+        self.status_label.setText(tr(text))
+        if text.startswith('Verifying'):
             self.progress.setRange(0, 0)
 
     @Slot(str, object)
@@ -175,13 +148,13 @@ class SourcePage(QWidget):
     def _on_worker_failed(self, task_id: str, message: str) -> None:
         self.progress.setRange(0, 100)
         self.progress.setValue(0)
-        self.status_label.setText("FAILED")
-        QMessageBox.critical(self, "ChromaPress", message)
+        self.status_label.setText(tr('FAILED'))
+        QMessageBox.critical(self, tr('ChromaPress'), tr(message))
 
     @Slot(str)
     def _on_worker_cancelled(self, task_id: str) -> None:
         self.progress.setRange(0, 100)
-        self.status_label.setText("Cancelled — partial download kept for resume")
+        self.status_label.setText(tr('Cancelled — partial download kept for resume'))
         self.cancel_btn.setEnabled(False)
 
     @Slot()
@@ -192,13 +165,11 @@ class SourcePage(QWidget):
             if thread is finished_thread:
                 remove_id = task_id
                 break
-
         if remove_id is not None:
             self._tasks.pop(remove_id, None)
             if self._active_download_task == remove_id:
                 self._active_download_task = None
                 self.cancel_btn.setEnabled(False)
-
         if not self._tasks:
             self._set_busy(False)
 
@@ -211,76 +182,58 @@ class SourcePage(QWidget):
             return
         task[3].set()
         self.cancel_btn.setEnabled(False)
-        self.status_label.setText("Cancelling…")
+        self.status_label.setText(tr('Cancelling…'))
 
     def open_existing(self):
-        path, _ = QFileDialog.getOpenFileName(
-            self, "Open Linux ISO", "", "Linux ISO (*.iso);;All files (*)"
-        )
+        path, _ = QFileDialog.getOpenFileName(self, tr('Open Linux ISO'), '', tr('Linux ISO (*.iso);;All files (*)'))
         if not path:
             return
         self.path_label.setText(path)
-        self._analyze(path, kind="existing")
+        self._analyze(path, kind='existing')
 
     def _analyze(self, path: str, kind: str):
-        self.status_label.setText("Analyzing ISO…")
+        self.status_label.setText(tr('Analyzing ISO…'))
         self.progress.setRange(0, 0)
         bridge = WslBridge(self.settings.wsl_distro)
 
         def work(_progress, _status, _cancel_event):
             data = bridge.analyze_iso(path)
-            data["source_kind"] = kind
+            data['source_kind'] = kind
             return data
 
         def done(data):
             self.progress.setRange(0, 100)
             self.progress.setValue(100)
-            self.status_label.setText("READY")
-            distro = data.get("distribution") or "Unknown Linux"
-            version = data.get("version") or ""
-            arch = data.get("architecture") or ""
-            summary = " ".join(x for x in (distro, version, arch) if x)
-            self.current_source_label.setText(f"Current source: {summary}")
+            self.status_label.setText(tr('READY'))
+            distro = data.get('distribution') or 'Unknown Linux'
+            version = data.get('version') or ''
+            arch = data.get('architecture') or ''
+            summary = ' '.join((x for x in (distro, version, arch) if x))
+            self.current_source_label.setText(tr(f'Current source: {summary}'))
             self.source_analyzed.emit(data)
-
         self._run(work, done)
 
     def download_official(self):
         if not self.settings.cache_dir.strip():
-            QMessageBox.warning(
-                self,
-                "Storage location required",
-                "Choose an explicit ISO/download cache in Settings before downloading a multi-GB distribution image.",
-            )
+            QMessageBox.warning(self, tr('Storage location required'), tr('Choose an explicit ISO/download cache in Settings before downloading a multi-GB distribution image.'))
             return
-
         source_id = self.official_combo.currentData()
-        source = next(x for x in OFFICIAL_SOURCES if x.id == source_id)
+        source = next((x for x in OFFICIAL_SOURCES if x.id == source_id))
         cache = Path(self.settings.cache_dir)
-
-        # Give immediate feedback before any DNS/TLS/network work begins.
         self.progress.setRange(0, 100)
         self.progress.setValue(0)
-        self.status_label.setText(f"Starting direct download: {source.label}")
+        self.status_label.setText(tr(f'Starting direct download: {source.label}'))
 
         def work(progress_signal, status_signal, cancel_event):
+
             def progress(done, total):
                 progress_signal(int(done * 100 / total) if total else 0)
-
-            path = download_official(
-                source,
-                cache,
-                progress=progress,
-                status=status_signal,
-                cancelled=cancel_event.is_set,
-                reserve_gb=self.settings.reserve_gb,
-            )
+            path = download_official(source, cache, progress=progress, status=status_signal, cancelled=cancel_event.is_set, reserve_gb=self.settings.reserve_gb)
             return str(path)
 
         def downloaded(path):
             self.path_label.setText(path)
             self.cancel_btn.setEnabled(False)
-            self.status_label.setText("Verified — analyzing ISO…")
-            self._analyze(path, kind="official")
-
+            self.status_label.setText(tr('Verified — analyzing ISO…'))
+            self._analyze(path, kind='official')
         self._run(work, downloaded, cancellable=True)

@@ -1,11 +1,9 @@
 from __future__ import annotations
-
+from chromapress.i18n import tr
 from PySide6.QtCore import Signal, Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QListWidget, QListWidgetItem, QPushButton, QHBoxLayout, QMessageBox
-
 from chromapress.models import ChangeItem, ChangeKind
 from chromapress.services.preflight import test_change
-
 
 class ChangesPanel(QWidget):
     changed = Signal()
@@ -15,14 +13,16 @@ class ChangesPanel(QWidget):
         super().__init__(parent)
         self.setMinimumWidth(280)
         layout = QVBoxLayout(self)
-        title = QLabel("Changes")
-        title.setObjectName("panelTitle")
-        self.summary = QLabel("No changes staged")
+        layout.setContentsMargins(12, 12, 12, 12)
+        layout.setSpacing(10)
+        title = QLabel(tr('Changes'))
+        title.setObjectName('panelTitle')
+        self.summary = QLabel(tr('No changes staged'))
         self.list = QListWidget()
         buttons = QHBoxLayout()
-        self.test_btn = QPushButton("Test")
-        self.undo_btn = QPushButton("Undo")
-        self.review_btn = QPushButton("Full overview")
+        self.test_btn = QPushButton(tr('Test'))
+        self.undo_btn = QPushButton(tr('Undo'))
+        self.review_btn = QPushButton(tr('Full overview'))
         buttons.addWidget(self.test_btn)
         buttons.addWidget(self.undo_btn)
         buttons.addWidget(self.review_btn)
@@ -47,7 +47,6 @@ class ChangesPanel(QWidget):
         self.refresh(preferred_id=current_id, select_fallback=True)
 
     def add_change(self, change: ChangeItem) -> None:
-        # Identical staged actions are one plan item, not repeated clicks.
         for existing in self._changes:
             if existing.kind == change.kind and existing.payload == change.payload:
                 self.refresh(preferred_id=existing.id, select_fallback=True)
@@ -58,17 +57,17 @@ class ChangesPanel(QWidget):
 
     @staticmethod
     def _target_ref(change: ChangeItem) -> str:
-        explicit = str(change.payload.get("target_ref", "")).strip()
+        explicit = str(change.payload.get('target_ref', '')).strip()
         if explicit:
             return explicit
-        package = str(change.payload.get("package", "")).strip()
+        package = str(change.payload.get('package', '')).strip()
         if package:
-            return f"pkg:{package}"
-        desktop = str(change.payload.get("desktop_file", "")).strip()
+            return f'pkg:{package}'
+        desktop = str(change.payload.get('desktop_file', '')).strip()
         if desktop:
-            return f"desktop:{desktop}"
-        application = str(change.payload.get("application", "")).strip()
-        return f"name:{application.casefold()}" if application else ""
+            return f'desktop:{desktop}'
+        application = str(change.payload.get('application', '')).strip()
+        return f'name:{application.casefold()}' if application else ''
 
     def undo_installed_change(self, target_ref: str) -> None:
         """Undo a staged Remove or Replace for one installed application.
@@ -80,50 +79,40 @@ class ChangesPanel(QWidget):
         """
         target_ref = str(target_ref).strip()
         before = len(self._changes)
-        self._changes[:] = [
-            c for c in self._changes
-            if not (
-                c.kind in {ChangeKind.PACKAGE_REMOVE, ChangeKind.PACKAGE_REPLACE}
-                and self._target_ref(c) == target_ref
-            )
-        ]
+        self._changes[:] = [c for c in self._changes if not (c.kind in {ChangeKind.PACKAGE_REMOVE, ChangeKind.PACKAGE_REPLACE} and self._target_ref(c) == target_ref)]
         if len(self._changes) != before:
             self.refresh(select_fallback=True)
             self.changed.emit()
 
-    # Compatibility path used by older Alpha 14/15 row signals.
     def undo_package_remove(self, package: str) -> None:
         package = str(package).strip()
         if package:
-            self.undo_installed_change(f"pkg:{package}")
+            self.undo_installed_change(f'pkg:{package}')
 
     def undo_package_add(self, package: str) -> None:
         before = len(self._changes)
-        self._changes[:] = [
-            c for c in self._changes
-            if not (c.kind == ChangeKind.PACKAGE_REPOSITORY and str(c.payload.get("package", "")) == package)
-        ]
+        self._changes[:] = [c for c in self._changes if not (c.kind == ChangeKind.PACKAGE_REPOSITORY and str(c.payload.get('package', '')) == package)]
         if len(self._changes) != before:
             self.refresh(select_fallback=True)
             self.changed.emit()
 
     def _current_id(self) -> str:
         item = self.list.currentItem()
-        return str(item.data(Qt.ItemDataRole.UserRole)) if item else ""
+        return str(item.data(Qt.ItemDataRole.UserRole)) if item else ''
 
-    def refresh(self, preferred_id: str = "", select_fallback: bool = False) -> None:
+    def refresh(self, preferred_id: str='', select_fallback: bool=False) -> None:
         if not preferred_id:
             preferred_id = self._current_id()
         self.list.clear()
         preferred_row = -1
         for row, change in enumerate(self._changes):
-            item = QListWidgetItem(f"{change.status.value}  {change.title}\n{change.detail}")
+            item = QListWidgetItem(tr(f'{change.status.value}  {change.title}\n{change.detail}'))
             item.setData(Qt.ItemDataRole.UserRole, change.id)
             self.list.addItem(item)
             if change.id == preferred_id:
                 preferred_row = row
         n = len(self._changes)
-        self.summary.setText("No changes staged" if n == 0 else f"{n} change{'s' if n != 1 else ''} staged")
+        self.summary.setText(tr('No changes staged') if n == 0 else tr(f"{n} change{('s' if n != 1 else '')} staged"))
         if preferred_row >= 0:
             self.list.setCurrentRow(preferred_row)
         elif select_fallback and n:
@@ -149,7 +138,7 @@ class ChangesPanel(QWidget):
         status, message = test_change(change)
         change.status = status
         self.refresh(preferred_id=change.id, select_fallback=True)
-        QMessageBox.information(self, f"{status.value}: {change.title}", message)
+        QMessageBox.information(self, tr(f'{status.value}: {change.title}'), tr(message))
         self.changed.emit()
 
     def _undo_selected(self) -> None:

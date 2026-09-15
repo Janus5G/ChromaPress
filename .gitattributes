@@ -1,0 +1,28 @@
+# Normalize text in the repository.
+* text=auto
+
+# Cross-platform source and CI files stay LF, including when edited on Windows.
+*.py   text eol=lf
+*.sh   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+*.json text eol=lf
+*.svg  text eol=lf
+
+# Native Windows command scripts.
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Binary artifacts/assets.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.ico  binary
+*.zip  binary
+*.deb  binary
+*.iso  binary
+*.whl  binary

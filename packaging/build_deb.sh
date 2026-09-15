@@ -11,7 +11,7 @@ mkdir -p \
   "${PKGROOT}/opt/chromapress" \
   "${PKGROOT}/usr/bin" \
   "${PKGROOT}/usr/share/applications" \
-  "${PKGROOT}/usr/share/icons/hicolor/scalable/apps" \
+  "${PKGROOT}/usr/share/icons/hicolor/256x256/apps" \
   "${PKGROOT}/usr/share/doc/chromapress" \
   "${OUT}"
 
@@ -63,7 +63,7 @@ Terminal=false
 Categories=Development;System;
 Keywords=Linux;ISO;image;builder;customization;
 EOF
-cp "${ROOT}/src/chromapress/assets/chromapress.svg" "${PKGROOT}/usr/share/icons/hicolor/scalable/apps/chromapress.svg"
+cp "${ROOT}/packaging/chromapress-256.png" "${PKGROOT}/usr/share/icons/hicolor/256x256/apps/chromapress.png"
 cp "${ROOT}/LICENSE" "${PKGROOT}/usr/share/doc/chromapress/LICENSE"
 cp "${ROOT}/THIRD_PARTY_NOTICES.md" "${PKGROOT}/usr/share/doc/chromapress/THIRD_PARTY_NOTICES.md"
 cp "${ROOT}/packaging/LGPL-3.0.txt" "${PKGROOT}/usr/share/doc/chromapress/LGPL-3.0.txt"

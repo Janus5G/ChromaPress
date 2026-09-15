@@ -129,24 +129,65 @@ def test_ai_prompt_explicitly_forbids_branding_manifest_shipping_telemetry_and_r
 def test_about_icon_mit_and_share_button_gui(monkeypatch):
     pytest.importorskip("PySide6")
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+
     from PySide6.QtWidgets import QApplication, QMessageBox, QPushButton
-    from chromapress.gui.about_dialog import AboutDialog, chromapress_icon, license_text, share_text
+    from chromapress.gui.about_dialog import (
+        AboutDialog,
+        chromapress_icon,
+        license_text,
+        share_text,
+    )
+    from chromapress.i18n import set_language
 
     app = QApplication.instance() or QApplication([])
+
     assert not chromapress_icon().isNull()
+
+    # The authoritative MIT license remains the original English license text.
     assert "MIT License" in license_text()
     assert "Permission is hereby granted, free of charge" in license_text()
-    message = share_text()
-    assert "free and open-source" in message
-    assert "share the official release" in message
-    dialog = AboutDialog()
-    button = dialog.findChild(QPushButton, "shareChromaPressButton")
-    assert button is not None and button.text() == "Share ChromaPress"
-    monkeypatch.setattr(QMessageBox, "information", lambda *args, **kwargs: None)
-    button.click()
-    assert QApplication.clipboard().text() == message
-    dialog.close()
 
+    monkeypatch.setattr(
+        QMessageBox,
+        "information",
+        lambda *args, **kwargs: None,
+    )
+
+    # English remains a supported alternate language.
+    set_language("en")
+    english_message = share_text()
+    assert "free and open-source" in english_message
+    assert "share the official release" in english_message
+
+    english_dialog = AboutDialog()
+    english_button = english_dialog.findChild(
+        QPushButton,
+        "shareChromaPressButton",
+    )
+    assert english_button is not None
+    assert english_button.text() == "Share ChromaPress"
+    english_button.click()
+    assert QApplication.clipboard().text() == english_message
+    english_dialog.close()
+
+    # Danish is the ChromaPress default/product language.
+    set_language("da")
+    danish_message = share_text()
+    assert "gratis open source" in danish_message
+
+    danish_dialog = AboutDialog()
+    danish_button = danish_dialog.findChild(
+        QPushButton,
+        "shareChromaPressButton",
+    )
+    assert danish_button is not None
+    assert danish_button.text() == "Del ChromaPress"
+    danish_button.click()
+    assert QApplication.clipboard().text() == danish_message
+    danish_dialog.close()
+
+    # Leave global language state at the product default for following tests.
+    set_language("da")
 
 def test_main_window_has_full_v1_navigation_and_actual_version_label():
     main = (SRC / "gui" / "main_window.py").read_text(encoding="utf-8")
@@ -155,7 +196,9 @@ def test_main_window_has_full_v1_navigation_and_actual_version_label():
         "Boot & Hardware", "Installer", "Desktop", "AI App Studio", "Changes", "Build & Verify",
     ):
         assert f'"{label}"' in main
-    assert "QLabel(__version__)" in main
+    about = (SRC / "gui" / "about_dialog.py").read_text(encoding="utf-8")
+    assert "Version {__version__}" in about
+    assert "QLabel(__version__)" not in main
     assert "v1 alpha 37" not in main
 
 

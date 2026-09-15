@@ -1,0 +1,41 @@
+name: Feature or idea
+description: Suggest an improvement, workflow or new capability
+title: "[Idea]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What are you trying to achieve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed idea
+      description: Describe the behavior you would like to see.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Source / ISO analysis
+        - Applications / Components
+        - Files / custom content
+        - System configuration
+        - Boot & Hardware
+        - Installer / Desktop
+        - AI App Studio
+        - Build & Verify
+        - Localization / UI
+        - Packaging / release
+        - Documentation
+        - Other
+  - type: textarea
+    id: safety
+    attributes:
+      label: Safety or compatibility considerations
+      description: If relevant, note privilege, ISO mutation, security, platform or compatibility implications.
