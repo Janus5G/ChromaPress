@@ -6,9 +6,9 @@
 
 # ChromaPress
 
-**Nuværende udgivelse:** `1.0.0a72`  
-**Licens:** MIT  
-**Platforme:** Windows 11 + WSL2 samt native Debian/Ubuntu  
+**Nuværende udgivelse:** `1.0.0a72`
+**Licens:** MIT
+**Platforme:** Windows 11 + WSL2 samt native Debian/Ubuntu
 **Runtime:** Python 3.11+ · PySide6 6.8+
 
 ChromaPress er et native desktop-værktøj til analyse, staging, tilpasning, opbygning og verificering af Linux-installationsimages.
@@ -143,11 +143,11 @@ ChromaPress kan organisere programmer ud fra det tilsigtede formål med målsyst
 
 > **Verificeringsstatus:** AI App Studio er ikke runtime-testet i denne udgivelse og indgår ikke i den verificerede end-to-end release-sti, der er dokumenteret ovenfor.
 
-AI App Studio er valgfrit og arbejder inden for samme reviewmodel som resten af ChromaPress.
+AI App Studio er en valgfri eksperimentel funktion, der er designet til at følge samme reviewmodel som resten af ChromaPress.
 
-Det kan hjælpe med at oprette eller revidere et program med kontekst om mål-Linux-systemet, samtidig med at det genererede projekt forbliver inspicerbart. Genereret kildekode **indsættes ikke ukritisk i en ISO**: review og validering er påkrævet, før programmet kan stages.
+Funktionen er beregnet til at hjælpe med at oprette eller revidere programmer med kontekst om mål-Linux-systemet, samtidig med at det genererede projekt forbliver inspicerbart. Genereret kildekode skal gennemgås og valideres, før den kan stages til inkludering i en ISO.
 
-API-legitimationsoplysninger er sessionsbaserede og skrives ikke til ChromaPress-projektfiler eller kopieres til mål-imaget.
+API-legitimationsoplysninger er beregnet til at være sessionsbaserede og er ikke designet til at blive gemt i ChromaPress-projektfiler eller kopieret til mål-imaget.
 
 ![ChromaPress AI App Studio](docs/screenshots/ai-app-studio.png)
 

@@ -6,8 +6,8 @@
 
 # ChromaPress
 
-**Current release:** `1.0.0a72`  
-**License:** MIT  
+**Current release:** `1.0.0a72`
+**License:** MIT
 **Platforms:** Windows 11 + WSL2, and native Debian/Ubuntu
 **Runtime:** Python 3.11+ · PySide6 6.8+
 
@@ -143,11 +143,11 @@ ChromaPress can organize applications around the intended use of the target syst
 
 > **Verification status:** AI App Studio has not been runtime-tested for this release and is not included in the verified end-to-end release path documented above.
 
-AI App Studio is optional and works inside the same review model as the rest of ChromaPress.
+AI App Studio is an optional experimental feature designed to follow the same review model as the rest of ChromaPress.
 
-It can help create or revise an application with target-Linux context, while keeping the generated project inspectable. Generated source is **not blindly inserted into an ISO**: review and validation are required before the application can be staged.
+It is intended to assist with creating or revising applications using target-Linux context while keeping the generated project inspectable. Generated source must be reviewed and validated before it can be staged for inclusion in an ISO.
 
-API credentials are session-scoped and are not written into ChromaPress project files or copied into the target image.
+API credentials are intended to remain session-scoped and are not designed to be stored in ChromaPress project files or copied into the target image.
 
 ![ChromaPress AI App Studio](docs/screenshots/ai-app-studio.png)
 
