@@ -2,9 +2,11 @@
   <img src="src/chromapress/assets/chromapress-logo.png" width="640" alt="ChromaPress">
 </p>
 
+[English](README.md) | [Dansk](README.da.md)
+
 # ChromaPress
 
-**Current release candidate:** `1.0.0a72`  
+**Current release:** `1.0.0a72`  
 **License:** MIT  
 **Platforms:** Windows 11 + WSL2, and native Debian/Ubuntu
 **Runtime:** Python 3.11+ · PySide6 6.8+
@@ -13,7 +15,7 @@ ChromaPress is a native desktop workbench for analyzing, staging, customizing, b
 
 The central design rule is simple: **the selected source ISO is treated as read-only**. Changes are staged and reviewed separately, then handled by the Linux-native servicing/build engine in a controlled workspace.
 
-> `1.0.0a72` is an alpha release candidate. Static analysis, manifests and package evidence are not a substitute for real boot, install, live-session or hardware validation where those are required.
+> `1.0.0a72` is an alpha release. Static analysis, manifests and package evidence are not a substitute for real boot, install, live-session or hardware validation where those are required.
 
 ## Highlights
 
@@ -27,7 +29,7 @@ The central design rule is simple: **the selected source ISO is treated as read-
 - Preservation-first System, Installer, Desktop and custom-content planning.
 - Current image-plan review before production.
 - SHA-256-backed source/integrity checks where applicable.
-- Optional AI App Studio with explicit review and validation gates.
+- Optional AI App Studio with explicit review and validation gates; this feature is not part of the current verified runtime path.
 - Danish and English interface support.
 - Windows `.exe` and Debian `.deb` release builds.
 
@@ -138,6 +140,8 @@ ChromaPress can organize applications around the intended use of the target syst
 ![ChromaPress application selection](docs/screenshots/applications.png)
 
 ## AI App Studio
+
+> **Verification status:** AI App Studio has not been runtime-tested for this release and is not included in the verified end-to-end release path documented above.
 
 AI App Studio is optional and works inside the same review model as the rest of ChromaPress.
 
