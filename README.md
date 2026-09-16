@@ -336,6 +336,8 @@ The original alpha-by-alpha development record is preserved in [docs/DEVELOPMENT
 
 A shorter release-oriented history is available in [CHANGELOG.md](CHANGELOG.md).
 
+Privatlivspolitik: https://github.com/Janus5G/ChromaPress/releases/download/v1.0.0a72/PRIVACY.md
+
 ## License
 
 ChromaPress is released under the [MIT License](LICENSE).
