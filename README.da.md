@@ -336,6 +336,12 @@ Den oprindelige alpha-for-alpha-udviklingshistorik er bevaret i [docs/DEVELOPMEN
 
 En kortere releaseorienteret historik findes i [CHANGELOG.md](CHANGELOG.md).
 
+## Privatlivspolitik
+
+ChromaPress indsamler, gemmer eller sender ikke bevidst personlige brugerdata.
+
+[Læs privatlivspolitikken](PRIVACY.md)
+
 ## Licens
 
 ChromaPress udgives under [MIT License](LICENSE).
