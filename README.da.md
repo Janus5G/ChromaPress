@@ -3,6 +3,8 @@
 </p>
 
 [English](README.md) | [Dansk](README.da.md)
+-
+[![SlopScore](https://slopscore.org/badge/Janus5G/ChromaPress.svg)](https://slopscore.org/r/Janus5G/ChromaPress)
 
 # ChromaPress
 
