@@ -4,7 +4,7 @@
 
 [English](README.md) | [Dansk](README.da.md)
 -
-[![SlopScore](https://slopscore.org/badge/Janus5G/ChromaPress.svg)](https://slopscore.org/r/Janus5G/ChromaPress)
+
 # ChromaPress
 
 **Current release:** `1.0.0a72`
